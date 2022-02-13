@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TaskAppentus</string>
+    <string name="dark_mode_enable">Dark Mode Enable</string>
+    <string name="dark_mode_disable">Dark Mode Disable</string>
+    <string name="places">Places</string>
+</resources>
