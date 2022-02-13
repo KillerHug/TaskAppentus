@@ -1,29 +1,34 @@
 package com.mayank.taskappentus
 
 import android.util.Log
-import androidx.paging.LoadType
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
 import com.mayank.taskappentus.api.ApiService
 import com.mayank.taskappentus.roomDB.ImageDatabase
 
-class ImagesDataSource(private val api: ApiService, private val db: ImageDatabase) : PagingSource<Int, ImageModel>() {
+class ImagesDataSource(private val api: ApiService, private val db: ImageDatabase) :
+    PagingSource<Int, ImageModel>() {
     val dao = db.imageDatabaseDao
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageModel> {
         return try {
             val nextPageNumber = params.key ?: 1
-            Log.e("DataSource", "pg no.: $nextPageNumber")
+
+// to get data from api according to page number
+            Log.e("DataSource", "load: $nextPageNumber")
             val response: List<ImageModel> = api.getImage(nextPageNumber)
+            Log.e("TAG", "size: "+response.size)
+//
             db.withTransaction {
-                Log.e("DataSource", "size: ${response.size}")
+//               store all data in DB according to page number
                 dao.insertAll(response)
-//                dao.insert(response[0])
             }
+//            manage page no.
             LoadResult.Page(
                 data = response,
-                prevKey = if (nextPageNumber > 0) nextPageNumber - 1 else null,
+                prevKey = if (nextPageNumber > 1) nextPageNumber - 1 else null,
                 nextKey = nextPageNumber + 1
             )
+
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

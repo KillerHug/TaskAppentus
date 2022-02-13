@@ -17,10 +17,10 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.mayank.taskappentus.databinding.ItemImageBinding
 
-
 class ImagesDisplayAdapter(context: MainActivity) :
     PagingDataAdapter<ImageModel, ImagesDisplayAdapter.PassengersViewHolder>(PassengersComparator) {
     var _context = context
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -33,7 +33,9 @@ class ImagesDisplayAdapter(context: MainActivity) :
     }
 
     override fun onBindViewHolder(holder: PassengersViewHolder, position: Int) {
+//        get model data from list
         val item = getItem(position)
+        //        display data on view
         item?.let { holder.bindPassenger(it) }
     }
 
@@ -41,13 +43,10 @@ class ImagesDisplayAdapter(context: MainActivity) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindPassenger(item: ImageModel) = with(binding) {
-            /*Glide.with(_context)
-                .load(item.download_url)
-                .placeholder(R.drawable.ic_image)
-                .onlyRetrieveFromCache(true)
-                .into(binding!!.ivItem)*/
             binding.shimmerLayout.visibility = View.VISIBLE
+//            shimmer effect start
             binding.shimmerLayout.startShimmer()
+//            image display
             Glide.with(_context)
                 .load(item.download_url)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -58,6 +57,7 @@ class ImagesDisplayAdapter(context: MainActivity) :
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        //                        manage shimmer effect
                         binding.shimmerLayout.visibility = View.VISIBLE
                         binding.shimmerLayout.startShimmer()
                         return false
@@ -70,6 +70,7 @@ class ImagesDisplayAdapter(context: MainActivity) :
                         dataSource: com.bumptech.glide.load.DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
+//                        manage shimmer effect
                         binding.shimmerLayout.stopShimmer()
                         binding.shimmerLayout.visibility = View.GONE
                         return false
@@ -81,6 +82,7 @@ class ImagesDisplayAdapter(context: MainActivity) :
     }
 }
 
+//    check duplicate item
 object PassengersComparator : DiffUtil.ItemCallback<ImageModel>() {
     override fun areItemsTheSame(oldItem: ImageModel, newItem: ImageModel): Boolean {
         return oldItem.id == newItem.id

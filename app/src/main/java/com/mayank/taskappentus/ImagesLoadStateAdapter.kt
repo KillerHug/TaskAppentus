@@ -10,10 +10,11 @@ import com.mayank.taskappentus.databinding.ItemLoadingStateBinding
 
 class ImagesLoadStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<ImagesLoadStateAdapter.PassengerLoadStateViewHolder>() {
-
+//    display loader on bottom of screen
     inner class PassengerLoadStateViewHolder(private val binding: ItemLoadingStateBinding,
                                              private val retry: () -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bind(loadState: LoadState) {
+//            check load state for display progressbar
             when (loadState) {
                 LoadState.Loading -> binding.progressbar.visibility = View.VISIBLE
                 else -> binding.progressbar.visibility = View.GONE

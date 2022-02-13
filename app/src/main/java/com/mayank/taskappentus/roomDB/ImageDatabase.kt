@@ -14,7 +14,7 @@ abstract class ImageDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: ImageDatabase? = null
-
+//create database instance
         fun getInstance(context: Context): ImageDatabase {
             synchronized(this) {
                 var instance = INSTANCE

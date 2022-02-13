@@ -22,17 +22,17 @@ class ImageAdapter(context: Context) :
     var imageList = ArrayList<ImageModel>()
     var _context = context
 
+//    recyclerview adapter viewholder for display item
     inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemBinding: ItemImageBinding = DataBindingUtil.bind(itemView.rootView)!!
         fun bind(item: ImageModel) {
-            /* Glide.with(_context)
-                 .load(user.download_url)
- //                .placeholder(R.drawable.loading)
-                 .into(itemBinding!!.ivItem)*/
             itemBinding.shimmerLayout.visibility = View.VISIBLE
+//            shimmer start for single item
             itemBinding.shimmerLayout.startShimmer()
+//            display image on view using glide
             Glide.with(_context)
                 .load(item.download_url)
+//              glide cache storage
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -41,6 +41,7 @@ class ImageAdapter(context: Context) :
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
+//                        manage shimmering effect
                         itemBinding.shimmerLayout.visibility = View.VISIBLE
                         itemBinding.shimmerLayout.startShimmer()
                         return false
@@ -53,6 +54,7 @@ class ImageAdapter(context: Context) :
                         dataSource: com.bumptech.glide.load.DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        //                        manage shimmering effect
                         itemBinding.shimmerLayout.stopShimmer()
                         itemBinding.shimmerLayout.visibility = View.GONE
                         return false
@@ -63,15 +65,14 @@ class ImageAdapter(context: Context) :
         }
     }
 
+//    create view for adapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder =
-        DataViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
-        )
+        DataViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false))
 
+//    get item size
     override fun getItemCount(): Int = imageList.size
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        Log.e("TAG", "onBindViewHolder: " + imageList[position].download_url)
         holder.bind(imageList[position])
     }
 
@@ -80,15 +81,6 @@ class ImageAdapter(context: Context) :
         this.imageList.apply {
             clear()
             addAll(list)
-        }
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateList(temp: ArrayList<ImageModel>) {
-        this.imageList.apply {
-            clear()
-            addAll(temp)
         }
         notifyDataSetChanged()
     }
